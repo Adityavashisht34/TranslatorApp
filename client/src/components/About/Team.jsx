@@ -1,4 +1,3 @@
-import React from "react";
 import "./Team.css";
 import team01 from "../../assets/team-01.jpg";
 import team02 from "../../assets/team-02.jpg";
@@ -35,7 +34,7 @@ const teamMembers = [
 const Team = () => {
   return (
     <div className="background-video">
-      <video className="background-clip" autoPlay loop muted alternate>
+      <video className="background-clip" autoPlay loop muted >
         <source src={backgroundVideo} type="video/mp4" />
       </video>
       <section className="our__team">

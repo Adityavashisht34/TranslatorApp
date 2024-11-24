@@ -146,7 +146,7 @@ function Translator() {
                 Translate();
                 console.log(e);
                 serverCall(e);
-                currentDate.getTime.toString()
+                setCurrentDate(currentDate.getDate.toString())
               }}
               disabled={loading}
             >
