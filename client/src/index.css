@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+
+.wrapper {
+  border-radius: 10px;
+  border: 1px solid #000000;
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 70vw;
+  height: auto;
+}
+
+.text-input {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  height: 35vh;
+}
+
+.to-text {
+  border-radius: 0px 10px 10px 0px;
+  border-left: 1px solid #ccc;
+}
+
+textarea {
+  height: auto;
+  outline: none;
+  resize: none;
+  width: 80%;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 18px;
+}
+
+textarea::placeholder {
+  color: #b7b7b7;
+}
+
+.controls,
+li,
+.icons,
+.icons i {
+  display: flex;
+  cursor: pointer;
+}
+
+.controls .row .icons i {
+  width: 40px;
+  font-size: 16px;
+  color: #b7b7b7;
+  cursor: pointer;
+  justify-content: center;
+}
+
+.controls .row.from .icons {
+  padding-right: 15px;
+  border-right: 1px solid #ccc;
+}
+
+.controls .row.to .icons {
+  padding-left: 15px;
+  border-left: 1px solid #ccc;
+}
+
+select {
+  color: #160f0f;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  padding: 10px;
+  background-color: rgba(232, 223, 223, 0.425);
+}
+.controls{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.toLang{
+
+}
