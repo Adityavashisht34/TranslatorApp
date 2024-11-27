@@ -8,8 +8,8 @@ import axios from "axios";
 //  instructions
 //},[dependencies])
 import lang from "../../languages";
-import "../TranslatorFolder/Translator.css";
-import backgroundVideo from "https://drive.google.com/file/d/1RgEbM8IiIgz2IyBi7aejt-mA01pqCraO/view?usp=sharing";
+import "../../styles/Translator.css"
+import backgroundVideo from "../../assets/backgroundvideo.mp4";
 
 function Translator() {
   const [fromText, setFromText] = useState();
@@ -33,24 +33,36 @@ function Translator() {
   //   setFromLanguage(toLanguage);
   //   setToLanguage(tempLang);
   // };
+
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false, // Use 24-hour format
+    timeZone: 'Asia/Kolkata', // New Delhi timezone
+  };
+  
+
+
   const serverCall = (e) => {
     e.preventDefault();
-    console.log(fromLanguage);
-    console.log(fromText);
-    console.log(toLanguage);
-    console.log(toText);
     let data = {
       fromlanguage: fromLanguage,
       fromtranslation: fromText,
       tolanguage: toLanguage,
       totranslation: toText,
-      date: currentDate
+      date: new Date().toLocaleString('en-IN', options),
     };
+  
     axios
-      .post("http://127.0.0.1:3001/translationsData", data)
+      .post("http://127.0.0.1:3001/translationsDataMain", data)
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
   };
+  
   const Translate = () => {
     setLoading(true);
     let url = `https://api.mymemory.translated.net/get?q=${fromText}&langpair=${fromLanguage}|${toLanguage}`;
@@ -58,7 +70,6 @@ function Translator() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.responseData.translatedText);
         setToText(data.responseData.translatedText);
         setLoading(false);
       });

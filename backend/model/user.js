@@ -1,14 +1,8 @@
 const mongoose = require("mongoose")
 const userSchema = new mongoose.Schema({
-  fromlanguage: String,
-  fromtranslation: String,
-  tolanguage: String,
-  totranslation: String,
-  date: String
-});
-
-const userModel = mongoose.model("translationsData",userSchema)
+    name: String,
+    email: String,
+    password: String
+})
+const userModel = mongoose.model("user", userSchema)
 module.exports = userModel
-
-
-

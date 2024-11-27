@@ -1,4 +1,4 @@
-import "./Team.css";
+import "../../styles/Team.css";
 import team01 from "../../assets/team-01.jpg";
 import team02 from "../../assets/team-02.jpg";
 import team03 from "../../assets/team-03.jpeg";

@@ -6,15 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 function History() {
     const [users, setUsers] = useState([{}])
-    useEffect(()=>{
-        axios.get("http://127.0.0.1:3001/translationsData")
-        .then((data)=>{
-            let info = data.data;
-            setUsers(info)
-        }
-    )
-        .catch(err=>console.log(err))
-    },[])
+    useEffect(() => {  
+        axios
+          .get("http://127.0.0.1:3001/translationsDataMain")
+          .then((response) => {
+            setUsers(response.data)
+        })
+          .catch((err) => console.log(err));
+      }, []);
+      
 
     return (
         <div className='w-100 vh-100 d-flex justify-content-center'>
