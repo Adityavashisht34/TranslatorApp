@@ -1,9 +1,11 @@
 import {NavLink} from "react-router-dom"
 import "../../styles/Header.css"
 import backgroundVideo from "../../assets/backgroundvideo.mp4";
+import Header from "../Header/Header";
 function LetsTranslate() {
   return (
     <>
+    <Header/>
       <div className="background-video">
         <video className="background-clip" autoPlay loop muted >
           <source src={backgroundVideo} type="video/mp4" />

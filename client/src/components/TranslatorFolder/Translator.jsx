@@ -1,68 +1,71 @@
 import { useEffect, useState } from "react";
-// use state is used for state management in website, konse button click, ya link click pr website kaise behave kregi. use state me hr baar website reload hoti hai
-//use effect se particular actions pr re-render application, jisse ek toh loading duration, particular events pr re-render ke liye dependencies joh hm pass krte hai, dependency ka mtlab uss particular function call ya event hote hi use effect call hoga and joh hm andar instructions voh execute hoyenge
 import axios from "axios";
-// use state syntax:
-// const/var/let [text,set text] = useState();
-// useEffect(()=>{
-//  instructions
-//},[dependencies])
 import lang from "../../languages";
-import "../../styles/Translator.css"
+import "../../styles/Translator.css";
 import backgroundVideo from "../../assets/backgroundvideo.mp4";
+import Header from "../Header/Header";
 
 function Translator() {
-  const [fromText, setFromText] = useState();
-  const [toText, setToText] = useState();
+  const [fromText, setFromText] = useState("");
+  const [toText, setToText] = useState("");
   const [fromLanguage, setFromLanguage] = useState("en-GB");
   const [toLanguage, setToLanguage] = useState("es-ES");
   const [languages, setLanguages] = useState({});
   const [loading, setLoading] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [translations, setTranslations] = useState([]); // State to hold user's translations
 
   useEffect(() => {
     setLanguages(lang);
+    Translations(); // Fetch user's translations on component mount
   }, []);
 
-  // const handleExchange = () => {
-  //   let tempValue = fromText;
-  //   setFromText(toText);
-  //   setToText(tempValue);
-
-  //   let tempLang = fromLanguage;
-  //   setFromLanguage(toLanguage);
-  //   setToLanguage(tempLang);
-  // };
-
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false, // Use 24-hour format
-    timeZone: 'Asia/Kolkata', // New Delhi timezone
+  const  Translations = () => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      axios.get(`http://127.0.0.1:3001/userTranslations/${userId}`)
+        .then(response => {
+          setTranslations(response.data); // Set the translations state
+        })
+        .catch(err => console.error(err));
+    }
   };
-  
-
 
   const serverCall = (e) => {
     e.preventDefault();
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error("User  ID is null. Please log in.");
+      return;
+    }
+
     let data = {
+      userId,
       fromlanguage: fromLanguage,
       fromtranslation: fromText,
       tolanguage: toLanguage,
       totranslation: toText,
-      date: new Date().toLocaleString('en-IN', options),
+      date: new Date().toLocaleString('en-IN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Kolkata',
+      }),
     };
-  
-    axios
-      .post("http://127.0.0.1:3001/translationsDataMain", data)
-      .then((result) => console.log(result))
-      .catch((err) => console.log(err));
+
+    axios.post("http://127.0.0.1:3001/translationsDataMain", data)
+      .then(() => {
+        Translations(); // Refresh translations after saving
+        setFromText(""); // Clear input fields
+        setToText("");
+      })
+      .catch(err => console.log(err));
   };
-  
+
   const Translate = () => {
     setLoading(true);
     let url = `https://api.mymemory.translated.net/get?q=${fromText}&langpair=${fromLanguage}|${toLanguage}`;
@@ -74,23 +77,12 @@ function Translator() {
         setLoading(false);
       });
   };
-  // const TranslateTo = ()=>{
-  //     setLoading(true);
-  //     let url = `https://api.mymemory.translated.net/get?q=${toText}&langpair=${toLanguage}|${toLanguage}`;
-
-  //     fetch(url)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         console.log(data.responseData.translatedText);
-  //         setToText(data.responseData.translatedText);
-  //         setLoading(false);
-  //       });
-  // }
 
   return (
     <>
+      <Header />
       <div className="background-video">
-        <video className="background-clip" autoPlay loop muted >
+        <video className="background-clip" autoPlay loop muted>
           <source src={backgroundVideo} type="video/mp4" />
         </video>
         <div className="container">
@@ -104,7 +96,7 @@ function Translator() {
                 value={fromText}
                 onChange={(e) => {
                   setFromText(e.target.value);
-                  if (e.target.value == "") {
+                  if (e.target.value === "") {
                     setToText("");
                     return;
                   } else {
@@ -144,26 +136,16 @@ function Translator() {
                   }}
                 >
                   {Object.entries(languages).map(([code, name]) => (
-                    <option key={code} value={code}>
+ <option key={code} value={code}>
                       {name}
                     </option>
                   ))}
                 </select>
               </li>
+              <li className="row submit">
+                <button onClick={serverCall}>Save Translation</button>
+              </li>
             </ul>
-            <div className="translate-btn">
-            <button
-              onClick={(e) => {
-                Translate();
-                console.log(e);
-                serverCall(e);
-                setCurrentDate(currentDate.getDate.toString())
-              }}
-              disabled={loading}
-            >
-              {loading ? "Translating" : "Save Translation"}
-            </button>
-          </div>
           </div>
         </div>
       </div>

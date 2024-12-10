@@ -4,6 +4,7 @@ import team02 from "../../assets/team-02.jpg";
 import team03 from "../../assets/team-03.jpeg";
 import team04 from "../../assets/team-04.jpeg";
 import backgroundVideo from "../../assets/backgroundvideo.mp4";
+import Header from "../Header/Header";
 
 const teamMembers = [
   {
@@ -33,6 +34,8 @@ const teamMembers = [
 
 const Team = () => {
   return (
+    <>
+    <Header/>
     <div className="background-video">
       <video className="background-clip" autoPlay loop muted >
         <source src={backgroundVideo} type="video/mp4" />
@@ -58,6 +61,7 @@ const Team = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

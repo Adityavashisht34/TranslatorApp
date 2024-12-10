@@ -1,59 +1,44 @@
-import {useEffect, useState} from 'react';
+// src/components/History/History.jsx
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-
-import 'bootstrap/dist/css/bootstrap.min.css'
-
+import Header from '../Header/Header';
+import '../../styles/History.css'; // Import the CSS file for styling
 
 function History() {
-    const [users, setUsers] = useState([{}])
-    useEffect(() => {  
-        axios
-          .get("http://127.0.0.1:3001/translationsDataMain")
-          .then((response) => {
-            setUsers(response.data)
-        })
-          .catch((err) => console.log(err));
-      }, []);
-      
+    const [history, setHistory] = useState([]);
+    const userId = localStorage.getItem('userId');
+
+    useEffect(() => {
+        if (userId) {
+            axios.get(`http://127.0.0.1:3001/userTranslations/${userId}`)
+                .then(response => {
+                    setHistory(response.data);
+                })
+                .catch(err => console.log(err));
+        }
+    }, [userId]);
 
     return (
-        <div className='w-100 vh-100 d-flex justify-content-center'>
-            <div className='w-50'>
-            <table className='table'>
-                <thead>
-                    <tr>
-                       <th>
-                        From Language
-                        </th> 
-                        <th>
-                            From Text
-                        </th>
-                        <th>
-                            To Language
-                        </th>
-                        <th>
-                            To Text
-                        </th>
-                        <th>
-                            Time of Entry
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-              users.map((user, index) => (
-                <tr key={index}>
-                  <td>{user.fromlanguage}</td>
-                  <td>{user.fromtranslation}</td>
-                  <td>{user.tolanguage}</td>
-                  <td>{user.totranslation}</td>
-                  <td>{user.date}</td>
-                </tr>
-              ))
-            }
-                </tbody>
-            </table>
-        </div>
+        <div className="history-container">
+            <Header />
+            <h1>Your Translation History</h1>
+            {history.length > 0 ? (
+                <ul className="history-list">
+                    {history.map((item, index) => (
+                        <li key={index} className="history-item">
+                            <div className="history-item-content">
+                                <p><strong>From:</strong> {item.fromlanguage}</p>
+                                <p><strong>To:</strong> {item.tolanguage}</p>
+                                <p><strong>Original:</strong> {item.fromtranslation}</p>
+                                <p><strong>Translated:</strong> {item.totranslation}</p>
+                                <p><strong>Date:</strong> {item.date}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p className="no-history">No history found.</p>
+            )}
         </div>
     );
 }
